@@ -3,7 +3,8 @@ import "./App.css";
 import { Route, Routes } from "react-router";
 import Home from "./components/home";
 import CreateRoom from "./components/create-room";
-import RoomJoin from "./components/room-join";
+// import JoinRoom from "./components/join-room";
+import Room from "./components/room";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/create" element={<CreateRoom />} />
-      <Route path="/join" element={<RoomJoin />} />
+      {/* <Route path="/join" element={<JoinRoom />} /> */}
+      <Route path="/room/:roomCode" element={<Room/>} />
     </Routes>
   );
 }
