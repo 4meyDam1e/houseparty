@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 import "./App.css";
+import { Route, Routes } from "react-router";
+import Home from "./components/home";
+import CreateRoom from "./components/create-room";
+import RoomJoin from "./components/room-join";
 
 
 function App() {
@@ -9,7 +13,11 @@ function App() {
   }, []);
 
   return (
-    <h1 className="h-full w-full text-center text-5xl">Hello from frontend</h1>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/create" element={<CreateRoom />} />
+      <Route path="/join" element={<RoomJoin />} />
+    </Routes>
   );
 }
 
