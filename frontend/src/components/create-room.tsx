@@ -71,7 +71,7 @@ const CreateRoom = () => {
 
       <FormControl>
         <TextField
-          required={true}
+          required
           type="number"
           defaultValue={defaultVotes}
           slotProps={{
