@@ -10,12 +10,14 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material";
+import Spinner from "./spinner";
 
 const defaultVotes = 2;
 
 const CreateRoom = () => {
   const [guestCanPause, setGuestCanPause] = useState(true);
   const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handlePauseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,7 @@ const CreateRoom = () => {
   };
 
   const handleCreateRoom = () => {
+    setIsLoading(true);
     axios.post(`${import.meta.env.VITE_API_URL}create-room`, {
       guest_can_pause: guestCanPause,
       votes_to_skip: votesToSkip,
@@ -40,12 +43,15 @@ const CreateRoom = () => {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {
+      setIsLoading(false);
     });
   };
 
   return (
     <div className="flex flex-col justify-center items-center gap-y-2">
-      <h1 className="text-4xl font-bold">Create A Room</h1>
+      <h1 className="text-4xl font-bold">Create a room</h1>
 
       <FormControl component="fieldset">
         <FormHelperText>
@@ -94,7 +100,11 @@ const CreateRoom = () => {
         variant="contained"
         onClick={handleCreateRoom}
       >
-        Create A Room
+        {isLoading ? (
+          <Spinner height="20" width="20" />
+        ) : (
+          "Create a room"
+        )}
       </Button>
 
       <Button
