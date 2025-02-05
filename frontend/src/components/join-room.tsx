@@ -10,68 +10,41 @@ const JoinRoom = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomCode(e.target.value);
-  };
-
   const handleJoinRoom = () => {
+    if (!roomCode) {
+      setError("Invalid code");
+      return
+    }
+
     setIsLoading(true);
-    axios.post(`${import.meta.env.VITE_API_URL}join-room`, {
-      code: roomCode,
-    }, {
-      withCredentials: true,
-    })
-    .then((response) => {
-      console.log(response.data);
-      navigate(`/room/${roomCode}`);
-    })
-    .catch((error) => {
-      console.log(error);
-      if (error.status === 400 || error.status === 404) {
-        setError("Invalid code");
-      } else {
-        setError("Unexpected server error");
-      }
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+    axios.post(`${import.meta.env.VITE_API_URL}join-room/`, { code: roomCode }, { withCredentials: true })
+      .then(() => navigate(`/room/${roomCode}`))
+      .catch((error) => {
+        console.error("Error joining room:", error);
+        setError(error.response?.status === 404 ? "Invalid code" : "Unexpected server error");
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
     <div className="flex flex-col justify-center items-center gap-y-2">
-      <h1 className="text-4xl font-bold mb-2">Join a room</h1>
+      <h1 className="text-4xl font-bold mb-2">Join a Room</h1>
 
       <FormControl>
         <TextField
           label="Room Code"
           placeholder="Enter a room code"
           value={roomCode}
-          onChange={handleCodeChange}
-          error={error ? true : false}
+          onChange={(e) => setRoomCode(e.target.value)}
+          error={!!error}
           helperText={error}
         />
       </FormControl>
 
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={handleJoinRoom}
-      >
-        {isLoading ? (
-          <Spinner height="20" width="20" />
-        ) : (
-          "Join a room"
-        )}
+      <Button color="primary" variant="contained" onClick={handleJoinRoom}>
+        {isLoading ? <Spinner height="20" width="20" /> : "Join a Room"}
       </Button>
-
-      <Button
-        color="secondary"
-        variant="contained"
-        href="/"
-      >
-        Back
-      </Button>
+      <Button color="secondary" variant="contained" href="/">Back</Button>
     </div>
   );
 };
