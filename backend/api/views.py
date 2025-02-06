@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
 from .models import Room
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 
 # Session key for storing the room code
 SESSION_ROOM_CODE = 'room_code'
@@ -89,7 +89,7 @@ class RoomDetail(APIView):
             return Response({'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
 
         if SESSION_ROOM_CODE not in self.request.session:
-            return Response({'error': 'You are not in a room'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'You are not in a room'}, status=status.HTTP_403_FORBIDDEN)
 
         rooms = Room.objects.filter(code=code)
         if rooms.exists():
@@ -109,7 +109,13 @@ class UserRoomStatus(APIView):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
-        return JsonResponse({'code': self.request.session.get(SESSION_ROOM_CODE)}, status=status.HTTP_200_OK)
+        rooms = Room.objects.filter(code=self.request.session.get(SESSION_ROOM_CODE))
+        if rooms.exists():
+            return JsonResponse({'code': self.request.session.get(SESSION_ROOM_CODE)}, status=status.HTTP_200_OK)
+        else:
+            self.request.session.pop(SESSION_ROOM_CODE, None)
+            return Response({'error': 'You were in an non-existing room'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LeaveRoom(APIView):
     """
@@ -122,7 +128,7 @@ class LeaveRoom(APIView):
             return Response({'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
 
         if SESSION_ROOM_CODE not in self.request.session:
-            return Response({'error': 'You are not in a room'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'You are not in a room'}, status=status.HTTP_403_FORBIDDEN)
 
         self.request.session.pop(SESSION_ROOM_CODE, None)
         host = self.request.session.session_key
@@ -132,3 +138,36 @@ class LeaveRoom(APIView):
         except Room.DoesNotExist:
             pass  # If room doesn't exist, do nothing
         return Response({'message': 'Successfully left the room'}, status=status.HTTP_200_OK)
+
+class UpdateRoom(APIView):
+    """
+    API endpoint to update an existing room for the host.
+    """
+    serializer_class = UpdateRoomSerializer
+
+    def patch(self, request, format=None):
+        print("SESSION DATA:", self.request.session.items())  # Debugging line
+
+        if not self.request.session.exists(self.request.session.session_key):
+            return Response({'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
+
+        if SESSION_ROOM_CODE not in self.request.session:
+            return Response({'error': 'You are not in a room'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            room = Room.objects.get(code=self.request.session.get(SESSION_ROOM_CODE))
+            if self.request.session.session_key != room.host:
+                return Response({'error': 'You are not the host'}, status=status.HTTP_403_FORBIDDEN)
+
+            serializer = self.serializer_class(data=request.data)
+            if not serializer.is_valid():
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            room.guest_can_pause = serializer.validated_data['guest_can_pause']
+            room.votes_to_skip = serializer.validated_data['votes_to_skip']
+            # Use update_fields for better performance under the hood
+            room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+        except Room.DoesNotExist:
+            return Response({'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
