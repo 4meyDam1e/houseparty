@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { Button, FormControl, TextField } from "@mui/material";
-import Spinner from "./spinner";
+import Spinner from "./Spinner";
 
 const JoinRoom = () => {
   const [roomCode, setRoomCode] = useState("");

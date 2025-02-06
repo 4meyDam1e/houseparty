@@ -1,10 +1,10 @@
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router";
-import Home from "./components/home";
-import CreateRoom from "./components/create-room";
-import JoinRoom from "./components/join-room";
-import Room from "./components/room";
-import RoomRedirect from "./utils/room-redirect";
+import Home from "./pages/Home";
+import CreateRoom from "./pages/CreateRoom";
+import JoinRoom from "./pages/JoinRoom";
+import Room from "./pages/Room";
+import RoomRedirect from "./utils/RoomRedirect";
 
 
 function App() {

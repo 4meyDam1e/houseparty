@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 import axios from "axios";
-import Spinner from "../components/spinner";
+import Spinner from "../pages/Spinner";
 
 /**
  * Checks if the user is in a room and redirects them accordingly.

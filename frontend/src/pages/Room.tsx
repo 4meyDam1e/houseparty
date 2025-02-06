@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { Button } from "@mui/material";
-import Spinner from "./spinner";
+import Spinner from "./Spinner";
 
 const Room = () => {
   const [guestCanPause, setGuestCanPause] = useState<boolean | null>(null);
