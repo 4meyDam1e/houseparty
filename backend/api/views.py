@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics, status
 from django.http import JsonResponse
 from .models import Room
 from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
@@ -115,7 +115,6 @@ class UserRoomStatus(APIView):
         else:
             self.request.session.pop(SESSION_ROOM_CODE, None)
             return Response({'error': 'You were in an non-existing room'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class LeaveRoom(APIView):
     """

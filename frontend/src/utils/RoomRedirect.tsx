@@ -12,7 +12,7 @@ const RoomRedirect = () => {
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}user-room-status/`, { withCredentials: true })
-      .then((response) => setRoomCode(response.data.code))
+      .then(({ data }) => setRoomCode(data.code))
       .catch((error) => console.error("Error fetching room status:", error))
       .finally(() => setIsLoading(false));
   }, []);

@@ -25,8 +25,8 @@ const RoomSettings = ({
   const handleUpdateRoom = () => {
     setIsLoading(true);
     axios.patch(`${import.meta.env.VITE_API_URL}update-room/`, { guest_can_pause: guestCanPause, votes_to_skip: votesToSkip }, { withCredentials: true })
-      .then((response) => {
-        const { guest_can_pause, votes_to_skip } = response.data;
+      .then(({ data }) => {
+        const { guest_can_pause, votes_to_skip } = data;
         updateRoom(guest_can_pause, votes_to_skip);
         setMssg("Room updated successfully!");
       })

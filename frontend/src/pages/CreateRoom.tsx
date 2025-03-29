@@ -15,7 +15,7 @@ const CreateRoom = () => {
   const handleCreateRoom = () => {
     setIsLoading(true);
     axios.post(`${import.meta.env.VITE_API_URL}create-room/`, { guest_can_pause: guestCanPause, votes_to_skip: votesToSkip }, { withCredentials: true })
-      .then((response) => navigate(`/room/${response.data.code}`))
+      .then(({ data }) => navigate(`/room/${data.code}`))
       .catch((error) => console.error("Error creating room:", error))
       .finally(() => setIsLoading(false));
   };

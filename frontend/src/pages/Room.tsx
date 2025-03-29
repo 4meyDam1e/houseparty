@@ -11,8 +11,31 @@ const Room = () => {
   const [isHost, setIsHost] = useState<boolean | null>(null);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSpotifyAuthenticated, setIsSpotifyAuthenticated] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const { roomCode } = useParams();
+
+  const authenticateSpotify = () => {
+    axios.get(`${import.meta.env.VITE_API_URL}spotify/refresh-token`, { withCredentials: true })
+      .then(({ data }) => {
+        console.log(data.message);
+        setIsSpotifyAuthenticated(true);
+      })
+      .catch((error) => {
+        if (error?.response?.status < 500) {  // No session/tokens i.e. not authenticated
+          axios.get(`${import.meta.env.VITE_API_URL}spotify/auth-url`)
+            .then(({ data }) => {
+              location.replace(data.url);
+            })
+            .catch((error) => {
+              console.error("Error authenticating to Spotify:", error);
+            });
+        } else {  // Unknown error
+          console.error("Error authenticating to Spotify:", error);
+        }
+      });
+  };
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}room-detail/?code=${roomCode}`, { withCredentials: true })
@@ -20,10 +43,13 @@ const Room = () => {
         setGuestCanPause(data.guest_can_pause);
         setVotesToSkip(data.votes_to_skip);
         setIsHost(data.is_host);
+        if (data.is_host && !isSpotifyAuthenticated) {
+          authenticateSpotify();
+        }
       })
       .catch(() => navigate("/"))
       .finally(() => setIsLoading(false));
-  }, [roomCode]);
+  }, [roomCode, isSpotifyAuthenticated]);
 
   const handleUpdateRoom = (updatedGuestCanPause: boolean, updatedVoteToSkip: number) => {
     setGuestCanPause(updatedGuestCanPause);
