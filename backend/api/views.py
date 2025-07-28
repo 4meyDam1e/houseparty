@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from .models import Room
 from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 
+
 # Session key for storing the room code
 SESSION_ROOM_CODE = 'room_code'
 
@@ -23,7 +24,6 @@ class CreateRoom(APIView):
     serializer_class = CreateRoomSerializer
 
     def post(self, request, format=None):
-        print("SESSION DATA:", self.request.session.items())  # Debugging line
 
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
@@ -58,6 +58,7 @@ class JoinRoom(APIView):
         print("SESSION DATA:", self.request.session.items())  # Debugging line
 
         if not self.request.session.exists(self.request.session.session_key):
+            print("CREATING SESSION IN JOIN ROOM:", self.request.session.items())  # Debugging line
             self.request.session.create()
 
         code = request.data.get(self.lookup_url_kwarg)
@@ -97,7 +98,7 @@ class RoomDetail(APIView):
             data['is_host'] = self.request.session.session_key == rooms.first().host
             return Response(data, status=status.HTTP_200_OK)
 
-        return Response({'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(data={'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class UserRoomStatus(APIView):
     """
@@ -167,6 +168,6 @@ class UpdateRoom(APIView):
             # Use update_fields for better performance under the hood
             room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
         except Room.DoesNotExist:
-            return Response({'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data={'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+        return Response(data=RoomSerializer(room).data, status=status.HTTP_200_OK)

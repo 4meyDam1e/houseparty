@@ -4,6 +4,7 @@ import axios from "axios";
 import { Button, FormControl, TextField } from "@mui/material";
 import Spinner from "./Spinner";
 
+
 const JoinRoom = () => {
   const [roomCode, setRoomCode] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +18,11 @@ const JoinRoom = () => {
     }
 
     setIsLoading(true);
-    axios.post(`${import.meta.env.VITE_API_URL}join-room/`, { code: roomCode }, { withCredentials: true })
+    axios.post(
+      `${import.meta.env.VITE_API_URL}join-room/`,
+      { code: roomCode },
+      { withCredentials: true }
+    )
       .then(() => navigate(`/room/${roomCode}`))
       .catch((error) => {
         console.error("Error joining room:", error);

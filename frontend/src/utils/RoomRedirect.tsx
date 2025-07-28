@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router";
 import axios from "axios";
 import Spinner from "../pages/Spinner";
 
+
 /**
  * Checks if the user is in a room and redirects them accordingly.
  */
@@ -17,7 +18,11 @@ const RoomRedirect = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  return isLoading ? <Spinner /> : roomCode ? <Navigate to={`/room/${roomCode}`} /> : <Outlet />;
+  return isLoading
+    ? <Spinner />
+    : roomCode
+      ? <Navigate to={`/room/${roomCode}`} />
+      : <Outlet />;
 };
 
 export default RoomRedirect;

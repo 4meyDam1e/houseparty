@@ -4,6 +4,7 @@ import axios from "axios";
 import { Button, TextField, FormHelperText, FormControl, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import Spinner from "./Spinner";
 
+
 const defaultVotes = 2;
 
 const CreateRoom = () => {
@@ -14,7 +15,14 @@ const CreateRoom = () => {
 
   const handleCreateRoom = () => {
     setIsLoading(true);
-    axios.post(`${import.meta.env.VITE_API_URL}create-room/`, { guest_can_pause: guestCanPause, votes_to_skip: votesToSkip }, { withCredentials: true })
+    axios.post(
+      `${import.meta.env.VITE_API_URL}create-room/`,
+      {
+        guest_can_pause: guestCanPause,
+        votes_to_skip: votesToSkip
+      },
+      { withCredentials: true }
+    )
       .then(({ data }) => navigate(`/room/${data.code}`))
       .catch((error) => console.error("Error creating room:", error))
       .finally(() => setIsLoading(false));

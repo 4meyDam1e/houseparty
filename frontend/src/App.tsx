@@ -16,6 +16,7 @@ function App() {
       <Route path="/create" element={<CreateRoom />} />
       <Route path="/join" element={<JoinRoom />} />
       <Route path="/room/:roomCode" element={<Room/>} />
+      {/* use replace prop to replaced unmatched props with "/" in browser history stack */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

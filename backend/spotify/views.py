@@ -8,6 +8,7 @@ from rest_framework import status
 from requests import Request, post
 from .models import SpotifyToken
 
+
 class SpotifyAuthUrl(APIView):
     """
     API endpoint to get the Spotify authorization request URL.
@@ -26,7 +27,7 @@ class SpotifyAuthUrl(APIView):
                 'scope': scopes
             }
         ).prepare().url
-        return Response({'url': url}, status=status.HTTP_200_OK)
+        return Response(data={'url': url}, status=status.HTTP_200_OK)
 
 
 class SpotifyRedirect(APIView):
@@ -82,7 +83,7 @@ class SpotifyRedirect(APIView):
             return redirect(settings.FRONTEND_URL)
         except Exception as error:
             # error = error if error else 'Failed to fetch tokens from Spotify'
-            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(data={'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class SpotifyRefreshToken(APIView):
@@ -92,7 +93,7 @@ class SpotifyRefreshToken(APIView):
 
     def get(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
-            return Response({'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(data={'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
 
         try:
             tokens = SpotifyToken.objects.filter(user=self.request.session.session_key)
@@ -128,8 +129,7 @@ class SpotifyRefreshToken(APIView):
                     'expires_in': expires_in
                 }
             )
-
             return Response(data={'message': 'Tokens refreshed successfully'}, status=status.HTTP_200_OK)
         except Exception as error:
             error = error if error else 'Failed to refresh Spotify tokens'
-            return Response({'error': error}, status=status.HTTP_500)
+            return Response(data={'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -1,7 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
-import { Button, TextField, FormHelperText, FormControl, Radio, RadioGroup, FormControlLabel, Alert, Collapse } from "@mui/material";
+import {
+  Button,
+  TextField,
+  FormHelperText,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Alert,
+  Collapse
+} from "@mui/material";
 import Spinner from "../pages/Spinner";
+
 
 interface RoomSettingsProps {
   initialGuestCanPause: boolean | null;
@@ -24,7 +35,14 @@ const RoomSettings = ({
 
   const handleUpdateRoom = () => {
     setIsLoading(true);
-    axios.patch(`${import.meta.env.VITE_API_URL}update-room/`, { guest_can_pause: guestCanPause, votes_to_skip: votesToSkip }, { withCredentials: true })
+    axios.patch(
+      `${import.meta.env.VITE_API_URL}update-room/`,
+      {
+        guest_can_pause: guestCanPause,
+        votes_to_skip: votesToSkip
+      },
+      { withCredentials: true }
+    )
       .then(({ data }) => {
         const { guest_can_pause, votes_to_skip } = data;
         updateRoom(guest_can_pause, votes_to_skip);
