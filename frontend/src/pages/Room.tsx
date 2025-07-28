@@ -5,40 +5,52 @@ import { Button } from "@mui/material";
 import Spinner from "./Spinner";
 import RoomSettings from "../components/RoomSettings";
 
+
 const Room = () => {
   const [guestCanPause, setGuestCanPause] = useState<boolean | null>(null);
   const [votesToSkip, setVotesToSkip] = useState<number | null>(null);
   const [isHost, setIsHost] = useState<boolean | null>(null);
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSpotifyAuthenticated, setIsSpotifyAuthenticated] = useState<boolean>(false);
-
   const navigate = useNavigate();
   const { roomCode } = useParams();
 
   const authenticateSpotify = () => {
-    axios.get(`${import.meta.env.VITE_API_URL}spotify/refresh-token`, { withCredentials: true })
+    setIsLoading(true);
+    axios.get(
+      `${import.meta.env.VITE_API_URL}spotify/refresh-token/`,
+      { withCredentials: true }
+    )
       .then(({ data }) => {
         console.log(data.message);
         setIsSpotifyAuthenticated(true);
       })
       .catch((error) => {
         if (error?.response?.status < 500) {  // No session/tokens i.e. not authenticated
-          axios.get(`${import.meta.env.VITE_API_URL}spotify/auth-url`)
+          axios.get(
+            `${import.meta.env.VITE_API_URL}spotify/auth-url/`,
+            { withCredentials: true }
+          )
             .then(({ data }) => {
               location.replace(data.url);
             })
             .catch((error) => {
               console.error("Error authenticating to Spotify:", error);
-            });
+            })
+            .finally(() => setIsLoading(false));
         } else {  // Unknown error
-          console.error("Error authenticating to Spotify:", error);
+          console.error("Error authenticating to Spotify:", JSON.stringify(error));
         }
       });
   };
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}room-detail/?code=${roomCode}`, { withCredentials: true })
+    setIsLoading(true);
+    axios.get(
+      `${import.meta.env.VITE_API_URL}room-detail/?code=${roomCode}`,
+      { withCredentials: true }
+    )
       .then(({ data }) => {
         setGuestCanPause(data.guest_can_pause);
         setVotesToSkip(data.votes_to_skip);

@@ -22,7 +22,7 @@ class SpotifyAuthUrl(APIView):
                 'client_id': settings.CLIENT_ID,
                 'response_type': 'code',
                 'redirect_uri': settings.REDIRECT_URI,
-                # 'state': ,
+                'state': self.request.session.session_key,
                 'scope': scopes
             }
         ).prepare().url
@@ -32,17 +32,23 @@ class SpotifyAuthUrl(APIView):
 class SpotifyRedirect(APIView):
     """
     API endpoint to request Spotify access token.
-    NOTE: This is the redirect URI upon authorization/authentication.
+    NOTE: This is the redirect URI upon authorization/authentication, set on Spotify Dashboard (https://developer.spotify.com/dashboard).
     """
 
     def get(self, request, format=None):
         code = request.GET.get('code')
-        # state = request.GET.get("state")
+        state = request.GET.get('state')
 
-        if not code:
-            return Response({'error': 'Authorization code is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not code or not state:
+            return Response(data={'error': 'Authorization code and state are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # Restore session using state (DO NOT create new session key)
+            self.request.session = self.request.session.__class__(state)
+            # fallback, shouldn't occur
+            if not self.request.session.exists(self.request.session.session_key):
+                self.request.session.create()
+
             # Request access token
             response = post(
                 url='https://accounts.spotify.com/api/token',
@@ -60,9 +66,6 @@ class SpotifyRedirect(APIView):
             refresh_token = response.get('refresh_token')
             expires_in = response.get('expires_in')
             # error = response.get('error')
-
-            if not self.request.session.exists(self.request.session.session_key):
-                self.request.session.create()
 
             expires_in = timezone.now() + timedelta(seconds=expires_in)
 
@@ -92,10 +95,12 @@ class SpotifyRefreshToken(APIView):
             return Response({'error': 'You are not in a session'}, status=status.HTTP_403_FORBIDDEN)
 
         try:
-            tokens = SpotifyToken.objects.get(user=self.request.session.session_key)
-
-            if tokens.expires_in > timezone.now():
-                return Response(data={'message': 'Token yet to expire'}, status=status.HTTP_200_OK)
+            tokens = SpotifyToken.objects.filter(user=self.request.session.session_key)
+            if tokens.exists():
+                if tokens.expires_in > timezone.now():
+                    return Response(data={'message': 'Token yet to expire'}, status=status.HTTP_200_OK)
+            else:
+                return Response(data={'error': 'No tokens to refresh'}, status=status.HTTP_404_NOT_FOUND)
 
             # Refresh token
             response = post(
@@ -125,8 +130,6 @@ class SpotifyRefreshToken(APIView):
             )
 
             return Response(data={'message': 'Tokens refreshed successfully'}, status=status.HTTP_200_OK)
-        except SpotifyToken.DoesNotExist:
-            return Response({'error': 'No tokens to refresh'}, status=status.HTTP_404_NOT_FOUND)
-        except:
+        except Exception as error:
             error = error if error else 'Failed to refresh Spotify tokens'
             return Response({'error': error}, status=status.HTTP_500)
