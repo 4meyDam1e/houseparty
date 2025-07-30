@@ -5,20 +5,24 @@ import CreateRoom from "./pages/CreateRoom";
 import JoinRoom from "./pages/JoinRoom";
 import Room from "./pages/Room";
 import RoomRedirect from "./utils/RoomRedirect";
+import Disclaimer from "./components/Disclaimer";
 
 
 function App() {
   return (
-    <Routes>
-      <Route element={<RoomRedirect />}>
-        <Route path="/" element={<Home />} />
-      </Route>
-      <Route path="/create" element={<CreateRoom />} />
-      <Route path="/join" element={<JoinRoom />} />
-      <Route path="/room/:roomCode" element={<Room/>} />
-      {/* use replace prop to replaced unmatched props with "/" in browser history stack */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <main className="flex flex-col justify-center items-center">
+      <Routes>
+        <Route element={<RoomRedirect />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route path="/create" element={<CreateRoom />} />
+        <Route path="/join" element={<JoinRoom />} />
+        <Route path="/room/:roomCode" element={<Room/>} />
+        {/* use replace prop to replaced unmatched props with "/" in browser history stack */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <Disclaimer />
+    </main>
   );
 }
 
