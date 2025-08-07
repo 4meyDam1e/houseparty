@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import axios from "axios";
-import { Button } from "@mui/material";
-import Spinner from "./Spinner";
-import RoomSettings from "../components/RoomSettings";
+// import { Button } from "@mui/material";
+import Spinner from "@/components/Spinner";
+import RoomSettings from "@/components/RoomSettings";
+import Button from "@/components/Button";
+import SpotifyLogo from "@/components/SpotifyLogo";
 
 
 const Room = () => {
@@ -72,6 +74,15 @@ const Room = () => {
     setShowSettings(false);
   };
 
+  const handleLeaveRoom = () => {
+    axios.post(
+      `${import.meta.env.VITE_API_URL}leave-room/`,
+      {},
+      { withCredentials: true }
+    )
+      .then(() => navigate("/"));
+  };
+
   if (isLoading) return <Spinner />;
 
   if (showSettings) {
@@ -87,13 +98,37 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-y-2">
-      <h1 className="text-4xl font-bold">Code: {roomCode}</h1>
-      <p>Guest can pause: {guestCanPause?.toString()}</p>
-      <p>Votes: {votesToSkip}</p>
-      <p>Host: {isHost?.toString()}</p>
+    <div className="flex flex-col justify-start items-center gap-y-5 h-full">
+      <SpotifyLogo />
 
-      {isHost &&
+      <h1 className="mb-6 text-4xl font-bold">Room: {roomCode}</h1>
+
+      <div className="flex flex-col justify-center items-center gap-y-2 border border-gray-500 rounded-xl p-5">
+        <p><span className="text-secondary-green">Guest can pause:</span> {guestCanPause?.toString()}</p>
+
+        <div className="w-full flex justify-between items-center">
+          <p><span className="text-secondary-green">Votes:</span> {votesToSkip}</p>
+          <p><span className="text-secondary-green">Host:</span> {isHost?.toString()}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-between items-center gap-y-2 w-full">
+        <Button
+          variant="primary"
+          className="w-full"
+          onClick={() => setShowSettings(true)}>
+          Settings
+        </Button>
+
+        <Button
+          variant="secondary"
+          className="w-full"
+          onClick={handleLeaveRoom}>
+          Leave room
+        </Button>
+      </div>
+
+      {/* {isHost &&
         <Button
           color="primary"
           variant="contained"
@@ -109,7 +144,7 @@ const Room = () => {
         onClick={() => axios.post(`${import.meta.env.VITE_API_URL}leave-room/`, {}, { withCredentials: true }).then(() => navigate("/"))}
       >
         Leave Room
-      </Button>
+      </Button> */}
     </div>
   );
 };

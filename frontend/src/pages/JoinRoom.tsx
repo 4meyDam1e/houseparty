@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
-import { Button, FormControl, TextField } from "@mui/material";
-import Spinner from "./Spinner";
+import Button from "@/components/Button";
+import Spinner from "@/components/Spinner";
+import Input from "@/components/Input";
+import SpotifyLogo from "@/components/SpotifyLogo";
 
 
 const JoinRoom = () => {
@@ -31,25 +33,33 @@ const JoinRoom = () => {
       .finally(() => setIsLoading(false));
   };
 
+  if (isLoading) return <Spinner />;
+
   return (
-    <div className="flex flex-col justify-center items-center gap-y-2">
-      <h1 className="text-4xl font-bold mb-2">Join a Room</h1>
+    <div className="flex flex-col justify-start items-center gap-y-5 h-full">
+      <SpotifyLogo />
 
-      <FormControl>
-        <TextField
-          label="Room Code"
-          placeholder="Enter a room code"
-          value={roomCode}
-          onChange={(e) => setRoomCode(e.target.value)}
-          error={!!error}
-          helperText={error}
-        />
-      </FormControl>
+      <h1 className="mb-6 text-4xl font-bold">Join a room</h1>
 
-      <Button color="primary" variant="contained" onClick={handleJoinRoom}>
-        {isLoading ? <Spinner height="20" width="20" /> : "Join a Room"}
-      </Button>
-      <Button color="secondary" variant="contained" href="/">Back</Button>
+      <Input
+        placeholderText="Enter a room code"
+        value={roomCode}
+        onChange={setRoomCode}
+        error={!!error}
+        helperText={error}
+      />
+
+      <div className="flex flex-col justify-between items-center gap-y-2 w-full">
+        <Button variant="primary" className="w-full" onClick={handleJoinRoom}>
+          Join room
+        </Button>
+
+        <Link to="/" className="w-full">
+          <Button variant="secondary" className="w-full">
+            Back
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

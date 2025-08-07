@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 import axios from "axios";
-import Spinner from "../pages/Spinner";
+import Spinner from "@/components/Spinner";
 
 
 /**

@@ -1,16 +1,16 @@
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router";
-import Home from "./pages/Home";
-import CreateRoom from "./pages/CreateRoom";
-import JoinRoom from "./pages/JoinRoom";
-import Room from "./pages/Room";
-import RoomRedirect from "./utils/RoomRedirect";
-import Disclaimer from "./components/Disclaimer";
+import Home from "@/pages/Home";
+import CreateRoom from "@/pages/CreateRoom";
+import JoinRoom from "@/pages/JoinRoom";
+import Room from "@/pages/Room";
+import RoomRedirect from "@/utils/RoomRedirect";
+import Disclaimer from "@/components/Disclaimer";
 
 
 function App() {
   return (
-    <main className="flex flex-col justify-center items-center">
+    <main className="flex flex-col justify-start items-center">
       <Routes>
         <Route element={<RoomRedirect />}>
           <Route path="/" element={<Home />} />
