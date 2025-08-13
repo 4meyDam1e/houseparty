@@ -39,7 +39,7 @@ const InputNumber = ({
       <div className="relative w-full">
         <input
           className={cn(
-            "relative px-3 py-3 border focus-visible:outline-none rounded-md placeholder-gray-500 text-primary-text font-medium transition duration-200",
+            "relative w-full px-3 py-3 border focus-visible:outline-none rounded-md placeholder-gray-500 text-primary-text font-medium transition duration-200",
             !error && "border-gray-400 hover:border-primary-text focus-visible:border-primary-text",
             error && "border-red-600 hover:border-red-600 focus-visible:border-red-500"
           )}

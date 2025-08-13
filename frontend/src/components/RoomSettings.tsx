@@ -1,8 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
+
 import { Radio, RadioChangeEvent } from "antd";
+import Navbar from "./Navbar";
 import Spinner from "@/components/Spinner";
-import SpotifyLogo from "@/components/SpotifyLogo";
 import InputNumber from "@/components/InputNumber";
 import Button from "./Button";
 
@@ -48,7 +49,7 @@ const RoomSettings = ({
 
   return (
     <div className="flex flex-col justify-start items-center gap-y-5 h-full">
-      <SpotifyLogo />
+      <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Room settings</h1>
 

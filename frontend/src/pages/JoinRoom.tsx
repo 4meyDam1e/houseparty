@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
+
+import Navbar from "@/components/Navbar";
 import Button from "@/components/Button";
 import Spinner from "@/components/Spinner";
 import Input from "@/components/Input";
-import SpotifyLogo from "@/components/SpotifyLogo";
 
 
 const JoinRoom = () => {
@@ -37,7 +38,7 @@ const JoinRoom = () => {
 
   return (
     <div className="flex flex-col justify-start items-center gap-y-5 h-full">
-      <SpotifyLogo />
+      <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Join a room</h1>
 
@@ -49,13 +50,13 @@ const JoinRoom = () => {
         helperText={error}
       />
 
-      <div className="flex flex-col justify-between items-center gap-y-2 w-full">
+      <div className="flex flex-col justify-between items-center gap-y-2">
         <Button variant="primary" className="w-full" onClick={handleJoinRoom}>
           Join room
         </Button>
 
-        <Link to="/" className="w-full">
-          <Button variant="secondary" className="w-full">
+        <Link to="/">
+          <Button variant="secondary">
             Back
           </Button>
         </Link>

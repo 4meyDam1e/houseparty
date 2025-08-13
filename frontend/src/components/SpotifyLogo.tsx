@@ -1,7 +1,16 @@
+import { cn } from "@/utils";
 import { useNavigate } from "react-router";
 
 
-const SpotifyLogo = () => {
+interface SpotifyLogoProps {
+  color?: string;
+  variant?: "title" | "navbar";
+}
+
+const SpotifyLogo = ({
+  color = "primary-text",
+  variant = "title",
+}: SpotifyLogoProps) => {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +20,10 @@ const SpotifyLogo = () => {
       aria-label="Houseparty"
       aria-hidden="false"
       height="100%"
-      className="w-10 fill-primary-text cursor-pointer"
+      className={cn(
+        `fill-${color} cursor-pointer`,
+        variant === "title" ? "w-10" : "w-6"
+      )}
       onClick={() => navigate("/")}
     >
         <title>Houseparty</title>

@@ -17,7 +17,7 @@ const Button = ({
   return (
     <button
       className={cn(
-        "px-4 py-3 rounded-full font-extrabold cursor-pointer transition duration-200",
+        "w-[300px] px-4 py-3 rounded-full font-extrabold cursor-pointer transition duration-200",
         variant === "primary" && "text-background bg-primary-green hover:bg-secondary-green",
         variant === "secondary" && "border border-gray-500 hover:border-primary-text",
         className

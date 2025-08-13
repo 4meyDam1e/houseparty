@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
+
+import Navbar from "@/components/Navbar";
 import { Radio, RadioChangeEvent } from "antd";
 import Spinner from "@/components/Spinner";
 import InputNumber from "@/components/InputNumber";
 import Button from "@/components/Button";
-import SpotifyLogo from "@/components/SpotifyLogo";
 
 
 const defaultVotesToSkip = 2;
@@ -35,7 +36,7 @@ const CreateRoom = () => {
 
   return (
     <div className="flex flex-col justify-start items-center gap-y-5 h-full">
-      <SpotifyLogo />
+      <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Create a room</h1>
 
@@ -65,13 +66,13 @@ const CreateRoom = () => {
         onChange={setVotesToSkip}
       />
 
-      <div className="flex flex-col justify-between items-center gap-y-2 w-full">
-        <Button variant="primary" className="w-full" onClick={handleCreateRoom}>
+      <div className="flex flex-col justify-between items-center gap-y-2">
+        <Button variant="primary" onClick={handleCreateRoom}>
           Create room
         </Button>
 
-        <Link to="/" className="w-full">
-          <Button variant="secondary" className="w-full">
+        <Link to="/">
+          <Button variant="secondary">
             Back
           </Button>
         </Link>

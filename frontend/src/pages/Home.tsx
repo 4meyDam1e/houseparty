@@ -11,14 +11,14 @@ const Home = () => {
       <h1 className="mb-6 text-6xl font-extrabold">Houseparty</h1>
 
       <div className="flex flex-col justify-between items-center gap-y-2.5 w-full">
-        <Link to="/create" className="w-full">
-          <Button variant="primary" className="w-full">
+        <Link to="/create">
+          <Button variant="primary">
             Create room
           </Button>
         </Link>
 
-        <Link to="/join" className="w-full">
-          <Button variant="secondary" className="w-full">
+        <Link to="/join">
+          <Button variant="secondary">
             Join room
           </Button>
         </Link>
