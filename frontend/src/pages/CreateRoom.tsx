@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { Radio, RadioChangeEvent } from "antd";
-// import { Button, TextField, FormHelperText, FormControl, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import Spinner from "@/components/Spinner";
 import InputNumber from "@/components/InputNumber";
 import Button from "@/components/Button";
@@ -77,54 +76,6 @@ const CreateRoom = () => {
           </Button>
         </Link>
       </div>
-
-      {/* <FormControl component="fieldset">
-        <FormHelperText>
-          <div className="text-center">Guest control of playback state</div>
-        </FormHelperText>
-        <RadioGroup
-          row
-          defaultValue="true"
-          onChange={(e) => setGuestCanPause(e.target.value === "true")}
-        >
-          <FormControlLabel
-            value="true"
-            control={<Radio color="primary" />}
-            label="Play/Pause"
-            labelPlacement="bottom"
-          />
-          <FormControlLabel
-            value="false"
-            control={<Radio color="secondary" />}
-            label="No Control"
-            labelPlacement="bottom"
-          />
-        </RadioGroup>
-      </FormControl>
-
-      <FormControl>
-        <TextField
-          required
-          type="number"
-          defaultValue={defaultVotes}
-          slotProps={{
-            htmlInput: {
-              min: 1,
-              style: { textAlign: "center" }
-            }
-          }}
-          onChange={(e) => setVotesToSkip(Number(e.target.value))}
-        />
-        <FormHelperText>
-          <div className="text-center">Votes required to skip song</div>
-        </FormHelperText>
-      </FormControl>
-
-      <Button color="primary" variant="contained" onClick={handleCreateRoom}>
-        {isLoading ? <Spinner height="20" width="20" /> : "Create a Room"}
-      </Button>
-
-      <Button color="secondary" variant="contained" href="/">Back</Button> */}
     </div>
   );
 };

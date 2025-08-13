@@ -52,14 +52,14 @@ const InputNumber = ({
         <div className="absolute right-2 top-0 h-full flex flex-col justify-center items-center gap-y-1.5">
           <button
             onClick={increment}
-            className="rounded-t-xs text-sm text-primary-text hover:text-muted-text transition duration-300"
+            className="rounded-t-xs text-sm text-primary-text hover:text-muted-text transition duration-300 cursor-pointer"
           >
             <FaChevronUp />
           </button>
 
           <button
             onClick={decrement}
-            className="rounded-b-xs text-sm text-primary-text hover:text-muted-text transition duration-300"
+            className="rounded-b-xs text-sm text-primary-text hover:text-muted-text transition duration-300 cursor-pointer"
           >
             <FaChevronDown />
           </button>

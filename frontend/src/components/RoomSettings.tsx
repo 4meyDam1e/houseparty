@@ -1,17 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { Radio, RadioChangeEvent } from "antd";
-import {
-  // Button,
-  // TextField,
-  // FormHelperText,
-  // FormControl,
-  // Radio,
-  RadioGroup,
-  FormControlLabel,
-  Alert,
-  Collapse
-} from "@mui/material";
 import Spinner from "@/components/Spinner";
 import SpotifyLogo from "@/components/SpotifyLogo";
 import InputNumber from "@/components/InputNumber";
@@ -36,8 +25,6 @@ const RoomSettings = ({
   const [guestCanPause, setGuestCanPause] = useState(initialGuestCanPause !== null ? initialGuestCanPause : true);
   const [votesToSkip, setVotesToSkip] = useState(initialVotesToSkip || defaultVotesToSkip);
   const [isLoading, setIsLoading] = useState(false);
-  const [mssg, setMssg] = useState<string>("")
-  const [isError, setIsError] = useState<boolean>(false)
 
   const handleUpdateRoom = () => {
     setIsLoading(true);
@@ -52,12 +39,9 @@ const RoomSettings = ({
       .then(({ data }) => {
         const { guest_can_pause, votes_to_skip } = data;
         updateRoom(guest_can_pause, votes_to_skip);
-        setMssg("Room updated successfully!");
       })
       .catch((error) => {
         console.error("Error updating room:", error);
-        setIsError(true);
-        setMssg("Error updating room...");
       })
       .finally(() => setIsLoading(false));
   };
@@ -65,18 +49,6 @@ const RoomSettings = ({
   return (
     <div className="flex flex-col justify-start items-center gap-y-5 h-full">
       <SpotifyLogo />
-
-      {/* <Collapse in={mssg !== ""}>
-        <Alert
-          severity={isError ? "error" : "success"}
-          onClose={() => {
-            setMssg("");
-            setIsError(false);
-          }}
-        >
-          {mssg}
-        </Alert>
-      </Collapse> */}
 
       <h1 className="mb-6 text-4xl font-bold">Room settings</h1>
 
@@ -111,54 +83,6 @@ const RoomSettings = ({
       </Button>
 
       <Button variant="secondary" onClick={closeSettings}>Close</Button>
-
-      {/* <FormControl component="fieldset">
-        <FormHelperText>
-          <div className="text-center">Guest control of playback state</div>
-        </FormHelperText>
-        <RadioGroup
-          row
-          defaultValue={initialGuestCanPause}
-          onChange={(e) => setGuestCanPause(e.target.value === "true")}
-        >
-          <FormControlLabel
-            value="true"
-            control={<Radio color="primary" />}
-            label="Play/Pause"
-            labelPlacement="bottom"
-          />
-          <FormControlLabel
-            value="false"
-            control={<Radio color="secondary" />}
-            label="No Control"
-            labelPlacement="bottom"
-          />
-        </RadioGroup>
-      </FormControl>
-
-      <FormControl>
-        <TextField
-          required
-          type="number"
-          defaultValue={initialVotesToSkip}
-          slotProps={{
-            htmlInput: {
-              min: 1,
-              style: { textAlign: "center" }
-            }
-          }}
-          onChange={(e) => setVotesToSkip(Number(e.target.value))}
-        />
-        <FormHelperText>
-          <div className="text-center">Votes required to skip song</div>
-        </FormHelperText>
-      </FormControl>
-
-      <Button color="primary" variant="contained" onClick={handleUpdateRoom}>
-        {isLoading ? <Spinner height="20" width="20" /> : "Update Room"}
-      </Button>
-
-      <Button color="secondary" variant="contained" onClick={closeSettings}>Close</Button> */}
     </div>
   );
 };

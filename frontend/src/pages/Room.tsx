@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
-// import { Button } from "@mui/material";
 import Spinner from "@/components/Spinner";
 import RoomSettings from "@/components/RoomSettings";
 import Button from "@/components/Button";
@@ -90,7 +89,6 @@ const Room = () => {
       <RoomSettings
         initialGuestCanPause={guestCanPause}
         initialVotesToSkip={votesToSkip}
-        // roomCode={roomCode}
         updateRoom={handleUpdateRoom}
         closeSettings={handleCloseSettings}
       />
@@ -127,24 +125,6 @@ const Room = () => {
           Leave room
         </Button>
       </div>
-
-      {/* {isHost &&
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => setShowSettings(true)}
-        >
-          Settings
-        </Button>
-      }
-
-      <Button
-        color="secondary"
-        variant="contained"
-        onClick={() => axios.post(`${import.meta.env.VITE_API_URL}leave-room/`, {}, { withCredentials: true }).then(() => navigate("/"))}
-      >
-        Leave Room
-      </Button> */}
     </div>
   );
 };
