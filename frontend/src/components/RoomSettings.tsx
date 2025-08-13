@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import Spinner from "@/components/Spinner";
 import InputNumber from "@/components/InputNumber";
 import Button from "./Button";
+import toast from "react-hot-toast";
 
 
 const defaultVotesToSkip = 2;
@@ -40,15 +41,28 @@ const RoomSettings = ({
       .then(({ data }) => {
         const { guest_can_pause, votes_to_skip } = data;
         updateRoom(guest_can_pause, votes_to_skip);
+        toast.success("Room updated", {
+          duration: 1500,
+          style:  {
+            borderRadius: "30px",
+            border: "solid 1px",
+            borderColor: "#353535",
+            background: "#121212",
+            color: "#ffffff",
+            fontFamily: "inherit",
+          },
+        });
+        closeSettings();
       })
       .catch((error) => {
+        toast.error("Couldn't update room");
         console.error("Error updating room:", error);
       })
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <div className="flex flex-col justify-start items-center gap-y-5 h-full">
+    <div className="flex flex-col justify-start items-center gap-y-5 h-full pt-10">
       <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Room settings</h1>

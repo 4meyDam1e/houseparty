@@ -97,7 +97,7 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col justify-start items-center gap-y-5 h-full">
+    <div className="flex flex-col justify-start items-center gap-y-5 h-full pt-10">
       <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Room: {roomCode}</h1>

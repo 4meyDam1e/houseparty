@@ -7,6 +7,7 @@ import { Radio, RadioChangeEvent } from "antd";
 import Spinner from "@/components/Spinner";
 import InputNumber from "@/components/InputNumber";
 import Button from "@/components/Button";
+import toast from "react-hot-toast";
 
 
 const defaultVotesToSkip = 2;
@@ -27,15 +28,31 @@ const CreateRoom = () => {
       },
       { withCredentials: true }
     )
-      .then(({ data }) => navigate(`/room/${data.code}`))
-      .catch((error) => console.error("Error creating room:", error))
+      .then(({ data }) => {
+        toast.success("Room created", {
+          duration: 1500,
+          style:  {
+            borderRadius: "30px",
+            border: "solid 1px",
+            borderColor: "#353535",
+            background: "#121212",
+            color: "#ffffff",
+            fontFamily: "inherit",
+          },
+        });
+        navigate(`/room/${data.code}`);
+      })
+      .catch((error) => {
+        toast.error("Couldn't create room");
+        console.error("Error creating room:", error);
+      })
       .finally(() => setIsLoading(false));
   };
 
   if (isLoading) return <Spinner />;
 
   return (
-    <div className="flex flex-col justify-start items-center gap-y-5 h-full">
+    <div className="flex flex-col justify-start items-center gap-y-5 h-full pt-10">
       <Navbar />
 
       <h1 className="mb-6 text-4xl font-bold">Create a room</h1>
