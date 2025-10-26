@@ -8,7 +8,7 @@ interface SpotifyLogoProps {
 }
 
 const SpotifyLogo = ({
-  color = "primary-text",
+  color = "fill-primary-text",
   variant = "title",
 }: SpotifyLogoProps) => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const SpotifyLogo = ({
       aria-hidden="false"
       height="100%"
       className={cn(
-        `fill-${color} cursor-pointer`,
+        `${color} cursor-pointer`,
         variant === "title" ? "w-10" : "w-6"
       )}
       onClick={() => navigate("/")}

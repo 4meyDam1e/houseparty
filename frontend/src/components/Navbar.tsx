@@ -12,7 +12,7 @@ const Navbar = () => {
         className="flex justify-start items-center gap-x-3 group cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <SpotifyLogo color="primary-green" variant="navbar" />
+        <SpotifyLogo color="fill-primary-green" variant="navbar" />
         <p className="text-xl font-bold group-hover:text-primary-text/80 transition duration-200">Houseparty</p>
       </div>
     </div>
