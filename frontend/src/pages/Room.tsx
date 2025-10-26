@@ -15,6 +15,7 @@ const Room = () => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpotifyAuthenticated, setIsSpotifyAuthenticated] = useState<boolean>(false);
+  const [song, setSong] = useState(null);
   const navigate = useNavigate();
   const { roomCode } = useParams();
 
@@ -47,6 +48,24 @@ const Room = () => {
       });
   };
 
+  const getCurrentSong = () => {
+    // setIsLoading(true);
+    axios.get(
+      `${import.meta.env.VITE_API_URL}spotify/current-song/`,
+      { withCredentials: true }
+    )
+      .then(({ data }) => {
+        console.log(data);
+        setSong(data);
+      })
+      .catch((error) => {
+        console.error("Error getting current song:", JSON.stringify(error));
+      })
+      .finally(() =>  {
+        // setIsLoading(false);
+      });
+  };
+
   useEffect(() => {
     setIsLoading(true);
     axios.get(
@@ -64,6 +83,15 @@ const Room = () => {
       .catch(() => navigate("/"))
       .finally(() => setIsLoading(false));
   }, [roomCode, isSpotifyAuthenticated]);
+
+  // Long polling
+  useEffect(() => {
+    const intervalId = setInterval(getCurrentSong, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const handleUpdateRoom = (updatedGuestCanPause: boolean, updatedVoteToSkip: number) => {
     setGuestCanPause(updatedGuestCanPause);
@@ -111,12 +139,16 @@ const Room = () => {
         </div>
       </div>
 
+      <div>{JSON.stringify(song)}</div>
+
       <div className="flex flex-col justify-between items-center gap-y-2">
-        <Button
-          variant="primary"
-          onClick={() => setShowSettings(true)}>
-          Settings
-        </Button>
+        {isHost && (
+          <Button
+            variant="primary"
+            onClick={() => setShowSettings(true)}>
+            Settings
+          </Button>
+        )}
 
         <Button
           variant="secondary"

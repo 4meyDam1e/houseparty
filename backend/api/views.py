@@ -80,7 +80,7 @@ class RoomDetail(APIView):
     lookup_url_kwarg = 'code'
 
     def get(self, request, format=None):
-        print("SESSION DATA:", self.request.session.items())  # Debugging line
+        print("SESSION DATA:", dict(self.request.session))  # Debugging line
 
         code = request.GET.get(self.lookup_url_kwarg)
         if not code:
